@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css"/>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/team_name_url/" method="post">
+    <div class="form-group row">
+        <label for="example-text-input" class="col-2 col-form-label">Підрозділ</label>
+        <div class="col-10">
+            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
+                <option selected>Choose...</option>
+                <option value="1">Підрозділ One</option>
+                <option value="2">Підрозділ Two</option>
+                <option value="3">Підрозділ Three</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="example-search-input" class="col-2 col-form-label">Заводський(інвент.) номер
+</label>
+        <div class="col-10">
+            <input class="form-control" type="search" placeholder="АС3453465" id="example-search-input">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="example-email-input" class="col-2 col-form-label">Тип АРМ</label>
+        <div class="col-10">
+            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
+                <option selected>Choose...</option>
+                <option value="1">Діловод</option>
+                <option value="2">Виконавець</option>
+                <option value="3">Керівник</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="example-url-input" class="col-2 col-form-label">Розташування</label>
+        <div class="col-3">
+            <input class="form-control" type="url" placeholder="№ військове містечко" id="example-url-input">
+        </div>
+        <div class="col-4">
+            <input class="form-control" type="url" placeholder="вулиця" id="example-url-input">
+        </div>
+        <div class="col-2">
+            <input class="form-control" type="url" placeholder="будинок" id="example-url-input">
+        </div>
+        <div class="col-1">
+            <input class="form-control" type="url" placeholder="кабінет" id="example-url-input">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="example-tel-input" class="col-2 col-form-label">Відповідальний за захист інформації в підрозділі</label>
+        <div class="col-2">
+            <input class="form-control" type="tel" placeholder="Звання" id="example-tel-input">
+        </div>
+        <div class="col-4">
+            <input class="form-control" type="tel" placeholder="Прізвище" id="example-tel-input">
+        </div>
+        <div class="col-4">
+            <input class="form-control" type="tel" placeholder="Номер телефону" id="example-tel-input">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="example-password-input" class="col-2 col-form-label">Вхідний номер документу</label>
+        <div class="col-5">
+            <input class="form-control" type="tel" value="1-(555)-555-5555" id="example-tel-input">
+        </div>
+        <div class="col-5">
+            <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+        </div>
+    </div>
+
+    <a href='/' class="btn btn-primary" type="submit">На головну </a>
+    <button class="btn btn-primary" type="submit">Додати</button>
+</form>
+
+</body>
+</html>
