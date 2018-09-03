@@ -2,8 +2,14 @@ from django.contrib import admin
 from .models import *
 
 
+# class PersonalInline(admin.TabularInline):
+#     model = Personal
+#     extra = 0
+
+
 class ComputersAdmin (admin.ModelAdmin):
     list_display = [field.name for field in Computers._meta.fields]
+    # inlines = [PersonalInline]
 
     class Meta:
         model = Computers
@@ -11,13 +17,13 @@ class ComputersAdmin (admin.ModelAdmin):
 admin.site.register(Computers, ComputersAdmin)
 
 
-class UsersAdmin (admin.ModelAdmin):
-    list_display = [field.name for field in Users._meta.fields]
+class PersonalAdmin (admin.ModelAdmin):
+    list_display = [field.name for field in Personal._meta.fields]
 
     class Meta:
-        model = Users
+        model = Personal
 
-admin.site.register(Users, UsersAdmin)
+admin.site.register(Personal, PersonalAdmin)
 
 
 class RanksAdmin (admin.ModelAdmin):
@@ -56,19 +62,18 @@ class SedoAllowanceAdmin (admin.ModelAdmin):
 admin.site.register(SedoAllowance, SedoAllowanceAdmin)
 
 
-class CabinetsAdmin (admin.ModelAdmin):
-    list_display = [field.name for field in Cabinets._meta.fields]
+class OfficersAdminsSedoAdmin (admin.ModelAdmin):
+    list_display = [field.name for field in OfficersAdminsSedo._meta.fields]
 
     class Meta:
-        model = Cabinets
+        model = OfficersAdminsSedo
 
-admin.site.register(Cabinets, CabinetsAdmin)
+admin.site.register(OfficersAdminsSedo, OfficersAdminsSedoAdmin)
 
-
-class ComputerTypesAdmin (admin.ModelAdmin):
-    list_display = [field.name for field in ComputerTypes._meta.fields]
-
-    class Meta:
-        model = ComputerTypes
-
-admin.site.register(ComputerTypes, ComputerTypesAdmin)
+# class ComputerTypesAdmin (admin.ModelAdmin):
+#     list_display = [field.name for field in ComputerTypes._meta.fields]
+#
+#     class Meta:
+#         model = ComputerTypes
+#
+# admin.site.register(ComputerTypes, ComputerTypesAdmin)

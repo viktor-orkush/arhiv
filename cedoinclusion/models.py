@@ -1,82 +1,26 @@
 from django.db import models
 
 
-class Computers(models.Model):
-    serial_number = models.CharField(max_length=64, blank=True, null=True, default=None)
-    type = models.CharField(max_length=64, blank=True, null=True, default=None)
-
-    def __str__(self):
-        return self.serial_number
-
-    class Meta:
-        verbose_name = 'Компютер'
-        verbose_name_plural = 'Компютери'
-        ordering = ('serial_number',)
-
-
-class Cabinets(models.Model):
-    id_cabinet = models.ForeignKey(Computers, on_delete=models.CASCADE)
-    cabinet_number = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.cabinet_number
-
-    class Meta:
-        verbose_name = 'Кабінет'
-        verbose_name_plural = 'Кабінети'
-        ordering = ('cabinet_number',)
-
-
-class ComputerTypes(models.Model):
-    id_type = models.ForeignKey(Computers, on_delete=models.CASCADE)
-    type = models.CharField(max_length=64, blank=True, null=True, default=None)
-
-    def __str__(self):
-        return self.type
-
-    class Meta:
-        verbose_name = 'Тип'
-        verbose_name_plural = 'Типи'
-        ordering = ('type',)
-
-
-class SedoAllowance(models.Model):
-    id_sedo_allowance = models.ForeignKey(Computers, on_delete=models.CASCADE)
-    our_income_number = models.CharField(max_length=64, blank=True, null=True, default=None)
-    our_income_date = models.DateField(blank=True, null=True, default=None)
-    alien_outcome_number = models.CharField(max_length=64, blank=True, null=True, default=None)
-    alien_outcome_date = models.DateField(blank=True, null=True, default=None)
-
-    def __str__(self):
-        return self.our_income_number
-
-    class Meta:
-        verbose_name = 'Включення'
-        verbose_name_plural = 'Включення'
-        ordering = ('our_income_number',)
-
-
-class Departments(models.Model):
-    id_department = models.ForeignKey(SedoAllowance, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64, blank=True, null=True, default=None)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Департамент'
-        verbose_name_plural = 'Департаменти'
-        ordering = ('name',)
+# class ComputerTypes(models.Model):
+#     type = models.CharField(max_length=64, blank=True, null=True, default=None)
+#
+#     def __str__(self):
+#         return self.type
+#
+#     class Meta:
+#         verbose_name = 'Тип'
+#         verbose_name_plural = 'Типи'
+#         ordering = ('type',)
 
 
 class Adresses(models.Model):
-    id_adress = models.ForeignKey(Departments, on_delete=models.CASCADE)
+    military_number = models.CharField(max_length=16, blank=True, null=True, default=None)
     city = models.CharField(max_length=64, blank=True, null=True, default=None)
     street = models.CharField(max_length=64, blank=True, null=True, default=None)
     building = models.CharField(max_length=64, blank=True, null=True, default=None)
 
-    def __str__(self):
-        return self.street
+    # def __str__(self):
+    #     return self.city
 
     class Meta:
         verbose_name = 'Адреса'
@@ -84,23 +28,20 @@ class Adresses(models.Model):
         ordering = ('street',)
 
 
-class Users(models.Model):
-    id_cyber_user = models.ForeignKey(SedoAllowance, on_delete=models.CASCADE)
-    # id_correspondence = models.ForeignKey(SedoAllowance, on_delete=models.CASCADE)
+class Departments(models.Model):
+    adress = models.ForeignKey(Adresses, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, blank=True, null=True, default=None)
-    phone = models.CharField(max_length=64, blank=True, null=True, default=None)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
     class Meta:
-        verbose_name = 'Прізвище'
-        verbose_name_plural = 'Прізвища'
+        verbose_name = 'Департамент'
+        verbose_name_plural = 'Департаменти'
         ordering = ('name',)
 
 
 class Ranks(models.Model):
-    id_rank = models.ForeignKey(Users, on_delete=models.CASCADE)
     rank = models.CharField(max_length=64, blank=True, null=True, default=None)
 
     def __str__(self):
@@ -110,3 +51,67 @@ class Ranks(models.Model):
         verbose_name = 'Ранг'
         verbose_name_plural = 'Ранги'
         ordering = ('rank',)
+
+
+class Personal(models.Model):
+    # id_cyber_user = models.ForeignKey(SedoAllowance, on_delete=models.CASCADE)
+    # id_worker = models.ForeignKey(SedoAllowance, on_delete=models.CASCADE)
+    rank = models.ForeignKey(Ranks, blank=True, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64, blank=True, null=True, default=None)
+    phone = models.CharField(max_length=64, blank=True, null=True, default=None)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Персонал'
+        verbose_name_plural = 'Персонал'
+        ordering = ('name',)
+
+
+class OfficersAdminsSedo(models.Model):
+    name = models.CharField(max_length=64, blank=True, null=True, default=None)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Офіцер ЦАБ'
+        verbose_name_plural = 'Офіцери ЦАБ'
+        ordering = ('name',)
+
+
+class SedoAllowance(models.Model):
+    # id = models.AutoField(primary_key=True)
+    our_income_number = models.CharField(max_length=64, blank=True, null=True, default=None)
+    our_income_date = models.DateField(blank=True, null=True, default=None)
+    alien_outcome_number = models.CharField(max_length=64, blank=True, null=True, default=None)
+    alien_outcome_date = models.DateField(blank=True, null=True, default=None)
+    department = models.ForeignKey(Departments, on_delete=models.CASCADE)
+    CAB_officer = models.ForeignKey(OfficersAdminsSedo, related_name='CAB_officer', on_delete=models.DO_NOTHING, null=True, blank=True)
+    cyber_user = models.ForeignKey(Personal, related_name='cyber_user', on_delete=models.DO_NOTHING, null=True, blank=True)
+    worker_user = models.ForeignKey(Personal, related_name='worker_user', on_delete=models.DO_NOTHING, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+    class Meta:
+        verbose_name = 'Включення'
+        verbose_name_plural = 'Включення'
+        ordering = ('id',)
+
+
+class Computers(models.Model):
+    sedo_allowance = models.ForeignKey(SedoAllowance, on_delete=models.CASCADE)
+    serial_number = models.CharField(max_length=64, blank=True, null=True, default=None)
+    type = models.CharField(max_length=64, blank=True, null=True, default=None)
+    cabinet_number = models.CharField(max_length=8, blank=True, default=0)
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+    class Meta:
+        verbose_name = 'Компютер'
+        verbose_name_plural = 'Компютери'
+        ordering = ('id',)

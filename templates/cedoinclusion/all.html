@@ -19,29 +19,36 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Департамент</th>
+      <th scope="col">Відповідальний за КБ</th>
+      <th scope="col">Вхідна №</th>
+      <th scope="col">Вхідна дата</th>
+      <th scope="col">Відпрацював оф. ЦАБ </th>
     </tr>
   </thead>
   <tbody id="myTable">
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
+    {% for sedoAllowance in sedoAllowances %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ sedoAllowance.department.name}}</td>
+            <td>{{ sedoAllowance.cyber_user.name}}</td>
+            <td>{{ sedoAllowance.our_income_number }}</td>
+            <td>{{ sedoAllowance.our_income_date}}</td>
+            <td>{{ sedoAllowance.CAB_officer.name }}</td>
+        </tr>
+
+        {% for computer in computers %}
+            {% ifequal sedoAllowance.id|stringformat:"s" computer.sedo_allowance|stringformat:"s" %}
+                <tr>
+                    <th></th>
+{#                    <th scope="row">{{ forloop.counter }}</th>#}
+                    <td>{{ computer.serial_number}}</td>
+                    <td>{{ computer.type}}</td>
+                </tr>
+            {% endifequal %}
+        {% endfor %}
+    {% endfor %}
+
   </tbody>
 </table>
 
