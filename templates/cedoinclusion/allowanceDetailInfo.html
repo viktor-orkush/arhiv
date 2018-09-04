@@ -1,9 +1,16 @@
-{% extends "base.html" %}
+{% load static %}
 
-{% block title %}My amazing blog 2{% endblock %}
-
-{% block content %}
-    <a href="/add" type="button" class="btn btn-primary btn-lg btn-block">Додати модуль</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css"/>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/add" type="button" class="btn btn-primary btn-lg btn-block">Додати модуль</a>
 <div class="form-group pull-right">
     <p style="margin-top:14px">Type something in the input field to search the table for first names, last names or
         emails:</p>
@@ -21,10 +28,9 @@
     </tr>
     </thead>
     <tbody id="myTable">
-    {% for sedoAllowance in sedoAllowances %}
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
-            <td><a href="{% url 'allowance_detail_info' sedoAllowance.id %}">{{ sedoAllowance.department.name }}</a></td>
+            <td><a href="">{{ sedoAllowance.department.name }}</a></td>
             <td>
                 <strong>Адреса:</strong> {{ sedoAllowance.department.adress.city }}<br>
                 <strong>Відповідальний за КБ:</strong> {{ sedoAllowance.cyber_user.name }}<br>
@@ -60,11 +66,11 @@
             </td>
 
         </tr>
-    {% endfor %}
 
     </tbody>
 </table>
-{% endblock %}
+
+</body>
 
 <script>
     $(document).ready(function () {

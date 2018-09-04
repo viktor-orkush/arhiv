@@ -91,6 +91,7 @@ class SedoAllowance(models.Model):
     CAB_officer = models.ForeignKey(OfficersAdminsSedo, related_name='CAB_officer', on_delete=models.DO_NOTHING, null=True, blank=True)
     cyber_user = models.ForeignKey(Personal, related_name='cyber_user', on_delete=models.DO_NOTHING, null=True, blank=True)
     worker_user = models.ForeignKey(Personal, related_name='worker_user', on_delete=models.DO_NOTHING, null=True, blank=True)
+    delete = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):

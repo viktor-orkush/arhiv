@@ -9,6 +9,31 @@ def all_inclusion(request):
     return render(request, 'cedoinclusion/all.html', locals())
 
 
+def delete_department(request):
+    computers = Computers.objects.all()
+    sedoAllowances = SedoAllowance.objects.all().order_by('our_income_date')
+    return render(request, 'cedoinclusion/all.html', locals())
+
+
+def edit_department(request, sedoAllowance_id):
+    if request.method == 'GET':
+        ranks = Ranks.objects.all()
+        sedoAllowance = SedoAllowance.objects.get(id = sedoAllowance_id)
+        computers = Computers.objects.filter(sedo_allowance = sedoAllowance_id)
+        CAB_officeres = OfficersAdminsSedo.objects.all()
+        return render(request, 'cedoinclusion/edit.html', locals())
+    else:
+        computers = Computers.objects.all()
+        sedoAllowances = SedoAllowance.objects.all().order_by('our_income_date')
+        return render(request, 'cedoinclusion/edit.html', locals())
+
+
+def allowance_detail_info(request, sedoAllowance_id):
+    computers = Computers.objects.filter(sedo_allowance = sedoAllowance_id)
+    sedoAllowance = SedoAllowance.objects.get(id = sedoAllowance_id)
+    return render(request, 'cedoinclusion/allowanceDetailInfo.html', locals())
+
+
 def add_inclusion(request):
     if request.method == 'GET':
         ranks = Ranks.objects.all()
