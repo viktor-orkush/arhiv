@@ -1,33 +1,20 @@
-{% load static %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css"/>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<a href="/add" type="button" class="btn btn-primary btn-lg btn-block">Додати модуль</a>
-<div class="form-group pull-right">
-    <p style="margin-top:14px">Type something in the input field to search the table for first names, last names or
-        emails:</p>
-    <input class="form-control" id="myInput" type="text" placeholder="Search..">
-</div>
-<table class="table table-sm table-bordered">
-    <thead>
-    <tr>
-        <th scope="col">№</th>
-        <th scope="col">Підрозділ</th>
-        <th scope="col">Включення</th>
-        <th scope="col">Відпрацював оф. ЦАБ</th>
-        <th scope="col">АРМ</th>
-        <th scope="col">Дія</th>
-    </tr>
-    </thead>
-    <tbody id="myTable">
+{% block title %}My amazing blog 2{% endblock %}
+
+{% block content %}
+    <table class="table table-sm table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Підрозділ</th>
+            <th scope="col">Включення</th>
+            <th scope="col">Відпрацював оф. ЦАБ</th>
+            <th scope="col">АРМ</th>
+            <th scope="col">Дія</th>
+        </tr>
+        </thead>
+        <tbody id="myTable">
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td><a href="">{{ sedoAllowance.department.name }}</a></td>
@@ -39,48 +26,45 @@
             </td>
             <td>{{ sedoAllowance.CAB_officer.name }}</td>
             <td>
-            <table class="table table-sm table-borderless">
-                <tr>
-                  <th scope="col">№</th>
-                  <th scope="col">Серійний номер</th>
-                  <th scope="col">Тип</th>
-                  <th scope="col">Каб.</th>
-                </tr>
-                {% for computer in computers %}
+                <table class="table table-sm table-borderless">
                     <tr>
-                    {% ifequal sedoAllowance.id|stringformat:"s" computer.sedo_allowance|stringformat:"s" %}
-                        <td></td>
-                        <td>{{ computer.serial_number }}</td>
-                        <td>{{ computer.type }}</td>
-                        <td>{{ computer.cabinet_number }}</td>
-                    {% endifequal %}
+                        <th scope="col">№</th>
+                        <th scope="col">Серійний номер</th>
+                        <th scope="col">Тип</th>
+                        <th scope="col">Каб.</th>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for computer in computers %}
+                        <tr>
+                            {% ifequal sedoAllowance.id|stringformat:"s" computer.sedo_allowance|stringformat:"s" %}
+                                <td></td>
+                                <td>{{ computer.serial_number }}</td>
+                                <td>{{ computer.type }}</td>
+                                <td>{{ computer.cabinet_number }}</td>
+                            {% endifequal %}
+                        </tr>
+                    {% endfor %}
+                </table>
             </td>
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                  <a href="{% url 'edit' sedoAllowance.id %}" type="button" class="btn btn-info  btn-secondary">Редагувати</a>
-                  <a href="#" type="button" class="btn btn-danger btn-secondary">Видалити</a>
+                    <a href="{% url 'edit' sedoAllowance.id %}" type="button" class="btn btn-info  btn-secondary">Редагувати</a>
+                    <a href="#" type="button" class="btn btn-danger btn-secondary">Видалити</a>
                 </div>
             </td>
 
         </tr>
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-</body>
-
-<script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#myTable tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
             });
         });
-    });
-</script>
-
-</html>
+    </script>
+{% endblock %}

@@ -1,164 +1,210 @@
-{% load static %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css"/>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="/add" method="post">
-    {% csrf_token %}
-    <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Підрозділ</label>
-        <div class="col-10">
-            <input class="form-control" type="search" placeholder="підрозділ" name="department">
-            {% comment %}<select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="department">
-                <option selected>Choose...</option>
-                <option value="1">Підрозділ One</option>
-                <option value="2">Підрозділ Two</option>
-                <option value="3">Підрозділ Three</option>
-            </select>{% endcomment %}
+{% block title %}My amazing blog 2{% endblock %}
+
+{% block content %}
+
+    <form action=" {% url 'add_inclusion' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label for="example-text-input" class="col-2 col-form-label">Підрозділ</label>
+            <div class="col-10">
+                <div class="input-group mb-3">
+                    <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="department">
+                        <option selected>Choose...</option>
+                        <option value="1">Підрозділ One</option>
+                        <option value="2">Підрозділ Two</option>
+                        <option value="3">Підрозділ Three</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-toggle="modal"
+                                data-target="#exampleModalCenter">Button
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-url-input" class="col-2 col-form-label">Розташування</label>
+            <div class="col-3">
+                <input class="form-control" type="search" placeholder="№ військове містечко" name="military_number">
+            </div>
+            <div class="col-1">
+                <input class="form-control" type="search" placeholder="місто" name="city">
+            </div>
+            <div class="col-4">
+                <input class="form-control" type="search" placeholder="вулиця" name="street">
+            </div>
+            <div class="col-2">
+                <input class="form-control" type="search" placeholder="будинок" name="building">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-tel-input" class="col-2 col-form-label">Відповідальний за захист інформації в
+                підрозділі</label>
+            <div class="col-2">
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="cyber_rank">
+                    {% for rank in ranks %}
+                        <option value="{{ rank.id }}">{{ rank.rank }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-4">
+                <input class="form-control" type="tel" placeholder="Прізвище" name="cyber_name">
+            </div>
+            <div class="col-4">
+                <input class="form-control" type="tel" placeholder="Номер телефону" name="cyber_number">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-password-input" class="col-2 col-form-label">Вхідний номер документу</label>
+            <div class="col-5">
+                <input class="form-control" type="tel" placeholder="Вхідна №" name="our_income_number">
+            </div>
+            <div class="col-5">
+                <input class="form-control" type="date" placeholder="Дата" name="our_income_date">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="example-password-input" class="col-2 col-form-label">Вихідний номер документу</label>
+            <div class="col-5">
+                <input class="form-control" type="text" placeholder="Вихідна №" name="alien_outcome_number">
+            </div>
+            <div class="col-5">
+                <input class="form-control" type="date" placeholder="Дата" name="alien_outcome_date">
+            </div>
+        </div>
+        <input type="hidden" name="count" value="1"/>
+        <div class="form-group row" id="field">
+            <label for="example-search-input" class="col-2 col-form-label">Заводський(інвент.) номер</label>
+            <div class="col-3">
+                <input class="form-control" type="search" placeholder="АС3453465" name="serial_number[]">
+            </div>
+            <div class="col-3">
+                <input class="form-control" type="text" placeholder="0.0.0.0" name="ip[]">
+            </div>
+            <div class="col-2">
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="computer_type[]">
+                    <option selected value="Діловод">Діловод</option>
+                    <option value="Виконавець">Виконавець</option>
+                    <option value="Керівник">Керівник</option>
+                </select>
+            </div>
+            <div class="col-1">
+                <input class="form-control" type="search" placeholder="Кабінет" name="room_number[]">
+            </div>
+            <div class="col-1">
+                <button id="b1" class="btn add-more" type="button">+</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="example-tel-input" class="col-2 col-form-label">Хто відпрацював офіцер ЦАБ</label>
+            <div class="col-4">
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="CAB_officeres">
+                    {% for officer in CAB_officeres %}
+                        <option value="{{ officer.id }}">{{ officer.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <a href='/' class="btn btn-primary" type="submit">На головну </a>
+        <button class="btn btn-primary" type="submit">Додати</button>
+    </form>
+
+
+    <!-- form add new department -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Додати підрозділ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+{#                        {% csrf_token %}#}
+                        <input class="form-control" type="text" placeholder="Підрозділ" name="department" id="department">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                        <button type="button" class="btn btn-primary" id = "id_add_department">Додати</button>
+                    </div>
+            </div>
         </div>
     </div>
 
-    <div class="form-group row">
-        <label for="example-url-input" class="col-2 col-form-label">Розташування</label>
-        <div class="col-3">
-            <input class="form-control" type="search" placeholder="№ військове містечко" name="military_number">
-        </div>
-        <div class="col-1">
-            <input class="form-control" type="search" placeholder="місто" name="city">
-        </div>
-        <div class="col-4">
-            <input class="form-control" type="search" placeholder="вулиця" name="street">
-        </div>
-        <div class="col-2">
-            <input class="form-control" type="search" placeholder="будинок" name="building">
-        </div>
+    <div id="result">
     </div>
 
-    <div class="form-group row">
-        <label for="example-tel-input" class="col-2 col-form-label">Відповідальний за захист інформації в підрозділі</label>
-        <div class="col-2">
-            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="cyber_rank">
-                {% for rank in ranks %}
-                    <option value="{{ rank.id }}">{{ rank.rank }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-4">
-            <input class="form-control" type="tel" placeholder="Прізвище" name="cyber_name">
-        </div>
-        <div class="col-4">
-            <input class="form-control" type="tel" placeholder="Номер телефону" name="cyber_number">
-        </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="example-tel-input" class="col-2 col-form-label">Хто відпрацював (вхідний) документ</label>
-        <div class="col-4">
-            <input class="form-control" type="tel" placeholder="Прізвище" name="worker_name">
-        </div>
-        <div class="col-4">
-            <input class="form-control" type="tel" placeholder="Номер телефону" name="worker_phone">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label for="example-password-input" class="col-2 col-form-label">Вхідний номер документу</label>
-        <div class="col-5">
-            <input class="form-control" type="tel" value="1-(555)-555-5555" name="our_income_number">
-        </div>
-        <div class="col-5">
-            <input class="form-control" type="date" value="2011-08-19" name="our_income_date">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="example-password-input" class="col-2 col-form-label">Вихідний номер документу</label>
-        <div class="col-5">
-            <input class="form-control" type="tel" value="1-(555)-555-5555" name="alien_outcome_number">
-        </div>
-        <div class="col-5">
-            <input class="form-control" type="date" value="2011-08-19" name="alien_outcome_date">
-        </div>
-    </div>
-    <input type="hidden" name="count" value="1" />
-    <div class="form-group row" id="field">
-        <label for="example-search-input" class="col-2 col-form-label">Заводський(інвент.) номер</label>
-        <div class="col-4">
-            <input class="form-control" type="search" placeholder="АС3453465" name="serial_number[]">
-        </div>
-        <div class="col-4">
-            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="computer_type[]">
-                <option selected value="Діловод">Діловод</option>
-                <option value="Виконавець">Виконавець</option>
-                <option value="Керівник">Керівник</option>
-            </select>
-        </div>
-        <div class="col-1">
-            <input class="form-control" type="search" placeholder="Кабінет" name="room_number[]">
-        </div>
-        <div class="col-1">
-            <button id="b1" class="btn add-more" type="button">+</button>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="example-tel-input" class="col-2 col-form-label">Хто відпрацював офіцер ЦАБ</label>
-        <div class="col-4">
-            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="CAB_officeres">
-                {% for officer in CAB_officeres %}
-                    <option value="{{ officer.id }}">{{ officer.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-
-    <a href='/' class="btn btn-primary" type="submit">На головну </a>
-    <button class="btn btn-primary" type="submit">Додати</button>
-</form>
-
-</body>
-</html>
-
-<script>
-$(document).ready(function(){
-    var next = 1;
-    $(".add-more").click(function(e){
-        e.preventDefault();
-        var addto = "#field" + next;
-        var addRemove = "#field" + (next);
-        next = next + 1;
-{#        var newIn = '<input autocomplete="off" class="input form-control" id="field' + next + '" name="field' + next + '" type="text">';#}
-        var newIn = '<div class="form-group row" id="field' + next + '" name="field' + next + '" >'
-                    +'<label for="example-search-input" class="col-2 col-form-label">Заводський(інвент.) номер</label>'
-                        +'<div class="col-4"><input class="form-control" type="search" placeholder="АС3453465" name="serial_number[]"> </div>'
-                        +'<div class="col-4"> <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="computer_type[]">'
-                            +'<option selected value="Діловод">Діловод</option>'
-                            +'<option value="Виконавець">Виконавець</option>'
-                            +'<option value="Керівник">Керівник</option>'
-                        +'</select> </div>'
-                    +'<div class="col-1"> <input class="form-control" type="search" placeholder="Кабінет" name="room_number[]"> </div>'
-                    +'<div class="col-1"><button id="remove' + next + '" class="btn btn-danger remove-me" >-</button></div><div id="field"></div></div>';
-        var newInput = $(newIn);
-{#        var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >-</button></div><div id="field">';#}
-        var removeBtn = '';
-        var removeButton = $(removeBtn);
-        $('#field').after(newInput);
-        $(addRemove).after(removeButton);
-        $("#field" + next).attr('data-source',$(addto).attr('data-source'));
-        $("#count").val(next);
-
-            $('.remove-me').click(function(e){
+    <script>
+        $(document).ready(function () {
+            var next = 1;
+            $(".add-more").click(function (e) {
                 e.preventDefault();
-                var fieldNum = this.id.charAt(this.id.length-1);
-                var fieldID = "#field" + fieldNum;
-                $(this).remove();
-                $(fieldID).remove();
+                var addto = "#field" + next;
+                var addRemove = "#field" + (next);
+                next = next + 1;
+                {#        var newIn = '<input autocomplete="off" class="input form-control" id="field' + next + '" name="field' + next + '" type="text">';#}
+                var newIn = '<div class="form-group row" id="field' + next + '" name="field' + next + '" >'
+                    + '<label for="example-search-input" class="col-2 col-form-label">Заводський(інвент.) номер</label>'
+                    + '<div class="col-3"><input class="form-control" type="text" placeholder="АС3453465" name="serial_number[]"> </div>'
+                    + '<div class="col-3"><input class="form-control" type="text" placeholder="0.0.0.0" name="ip[]"></div>'
+                    + '<div class="col-2"> <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="computer_type[]">'
+                    + '<option selected value="Діловод">Діловод</option>'
+                    + '<option value="Виконавець">Виконавець</option>'
+                    + '<option value="Керівник">Керівник</option>'
+                    + '</select> </div>'
+                    + '<div class="col-1"> <input class="form-control" type="search" placeholder="Кабінет" name="room_number[]"> </div>'
+                    + '<div class="col-1"><button id="remove' + next + '" class="btn btn-danger remove-me" >-</button></div><div id="field"></div></div>';
+                var newInput = $(newIn);
+                {#        var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >-</button></div><div id="field">';#}
+                var removeBtn = '';
+                var removeButton = $(removeBtn);
+                $('#field').after(newInput);
+                $(addRemove).after(removeButton);
+                $("#field" + next).attr('data-source', $(addto).attr('data-source'));
+                $("#count").val(next);
+
+                $('.remove-me').click(function (e) {
+                    e.preventDefault();
+                    var fieldNum = this.id.charAt(this.id.length - 1);
+                    var fieldID = "#field" + fieldNum;
+                    $(this).remove();
+                    $(fieldID).remove();
+                });
             });
-    });
-});
-</script>
+
+
+
+            {#AJAX add new department #}
+            $("#id_add_department").click(function () {
+                var department = $("#department").val();
+                $.ajax({
+                    url: "{% url 'ajax_add_depart' %}",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        department: department,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (json) {
+                        $('#result').append('ServerResponse:' + json.server_response);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        alert(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+                return false;
+            });
+
+        });
+    </script>
+
+{% endblock %}

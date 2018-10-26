@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="content-container" class="container p-none">
+        <div class="side-p">
+            <h3>Are you sure?</h3>
+            <p>You're about to delete. Please confirm.</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <a href="{% url 'all_inclusion'%}"
+                    class="btn btn-simple btn-large btn-default ">Cancel</a>
+                <input class="btn btn-danger" type="submit" value="Confirm"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

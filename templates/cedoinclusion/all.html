@@ -3,78 +3,59 @@
 {% block title %}My amazing blog 2{% endblock %}
 
 {% block content %}
-    <a href="/add" type="button" class="btn btn-primary btn-lg btn-block">Додати модуль</a>
-<div class="form-group pull-right">
-    <p style="margin-top:14px">Type something in the input field to search the table for first names, last names or
-        emails:</p>
-    <input class="form-control" id="myInput" type="text" placeholder="Search..">
-</div>
-<table class="table table-sm table-bordered">
-    <thead>
-    <tr>
-        <th scope="col">№</th>
-        <th scope="col">Підрозділ</th>
-        <th scope="col">Включення</th>
-        <th scope="col">Відпрацював оф. ЦАБ</th>
-        <th scope="col">АРМ</th>
-        <th scope="col">Дія</th>
-    </tr>
-    </thead>
-    <tbody id="myTable">
-    {% for sedoAllowance in sedoAllowances %}
+    <table class="table table-sm table-bordered">
+        <thead>
         <tr>
-            <th scope="row">{{ forloop.counter }}</th>
-            <td><a href="{% url 'allowance_detail_info' sedoAllowance.id %}">{{ sedoAllowance.department.name }}</a></td>
-            <td>
-                <strong>Адреса:</strong> {{ sedoAllowance.department.adress.city }}<br>
-                <strong>Відповідальний за КБ:</strong> {{ sedoAllowance.cyber_user.name }}<br>
-                <strong>Вхідна А0334 №:</strong> {{ sedoAllowance.our_income_number }}
-                <strong>Від: </strong> {{ sedoAllowance.our_income_date }}<br>
-            </td>
-            <td>{{ sedoAllowance.CAB_officer.name }}</td>
-            <td>
-            <table class="table table-sm table-borderless">
-                <tr>
-                  <th scope="col">№</th>
-                  <th scope="col">Серійний номер</th>
-                  <th scope="col">Тип</th>
-                  <th scope="col">Каб.</th>
-                </tr>
-                {% for computer in computers %}
-                    <tr>
-                    {% ifequal sedoAllowance.id|stringformat:"s" computer.sedo_allowance|stringformat:"s" %}
-                        <td></td>
-                        <td>{{ computer.serial_number }}</td>
-                        <td>{{ computer.type }}</td>
-                        <td>{{ computer.cabinet_number }}</td>
-                    {% endifequal %}
-                    </tr>
-                {% endfor %}
-            </table>
-            </td>
-            <td>
-                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                  <a href="{% url 'edit' sedoAllowance.id %}" type="button" class="btn btn-info  btn-secondary">Редагувати</a>
-                  <a href="#" type="button" class="btn btn-danger btn-secondary">Видалити</a>
-                </div>
-            </td>
-
+            <th scope="col">№</th>
+            <th scope="col">Підрозділ</th>
+            <th scope="col">Включення</th>
+            <th scope="col">Відпрацював оф. ЦАБ</th>
+            <th scope="col">АРМ</th>
+            <th scope="col">Дія</th>
         </tr>
-    {% endfor %}
+        </thead>
+        <tbody id="myTable">
+        {% for sedoAllowance in sedoAllowances %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{% url 'allowance_detail_info' sedoAllowance.id %}">{{ sedoAllowance.department.name }}</a>
+                </td>
+                <td>
+                    <strong>Адреса:</strong> {{ sedoAllowance.department.adress.city }}<br>
+                    <strong>Відповідальний за КБ:</strong> {{ sedoAllowance.cyber_user.name }}<br>
+                    <strong>Вхідна А0334 №:</strong> {{ sedoAllowance.our_income_number }}
+                    <strong>Від: </strong> {{ sedoAllowance.our_income_date }}<br>
+                </td>
+                <td>{{ sedoAllowance.CAB_officer.name }}</td>
+                <td>
+                    <table class="table table-sm table-borderless">
+                        <tr>
+{#                            <th scope="col">№</th>#}
+                            <th scope="col">С/Н</th>
+                            <th scope="col">IP</th>
+                            <th scope="col">Каб.</th>
+                        </tr>
+                        {% for computer in computers %}
+                            <tr>
+                                {% ifequal sedoAllowance.id|stringformat:"s" computer.sedo_allowance|stringformat:"s" %}
+{#                                    <td></td>#}
+                                    <td>{{ computer.serial_number }}</td>
+                                    <td>{{ computer.ip }}</td>
+                                    <td>{{ computer.cabinet_number }}</td>
+                                {% endifequal %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a href="{% url 'edit' sedoAllowance.id %}" type="button" class="btn btn-info  btn-secondary">Редагувати</a>
+                        <a href="{% url 'delete' pk=sedoAllowance.id %}" type="button" class="btn btn-danger btn-secondary">Видалити</a>
+                    </div>
+                </td>
 
-    </tbody>
-</table>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
-
-<script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#myTable tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-</script>
-
-</html>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}My amazing blog 2{% endblock %}
+
+{% block content %}
+    <table class="table table-sm table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Підрозділ</th>
+            <th scope="col">Відповідальний за КБ</th>
+            <th scope="col">Дата відпрацювання</th>
+        </tr>
+        </thead>
+        <tbody id="myTable">
+        {% for sedoAllowance in sedoAllowances %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{% url 'allowance_detail_info' sedoAllowance.id %}">{{ sedoAllowance.department.name }}</a></td>
+                <td> {{ sedoAllowance.cyber_user.name }} </td>
+                <td> {{ sedoAllowance.date}} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
