@@ -4,7 +4,12 @@
 <head>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css"/>
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+{#    <script#}
+{#  src="https://code.jquery.com/jquery-1.12.4.js"#}
+{#  integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="#}
+{#  crossorigin="anonymous"></script>#}
     <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/add_remove.js' %}"></script>
     <meta charset="UTF-8">
     <title>{% block title %}My amazing site{% endblock %}</title>
 </head>
@@ -27,6 +32,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'all_unit' %}">Включені підрозділи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'computer_add' %}">Додати ПК</a>
                     </li>
                 </ul>
                 <div class="form-inline">

@@ -2,9 +2,9 @@ from django.db import models
 
 
 class Departments(models.Model):
-    name = models.CharField(max_length=64, blank=True, null=True, default=None)
+    name = models.CharField(max_length=64, blank=True)
     military_number = models.CharField(max_length=16, blank=True, null=True, default=None)
-    city = models.CharField(max_length=64, blank=True, null=True, default=None)
+    city = models.CharField(max_length=64)
     street = models.CharField(max_length=64, blank=True, null=True, default=None)
     building = models.CharField(max_length=64, blank=True, null=True, default=None)
 
@@ -19,7 +19,7 @@ class Departments(models.Model):
 
 
 class Ranks(models.Model):
-    rank = models.CharField(max_length=64, blank=True, null=True, default=None)
+    rank = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
         return self.rank
@@ -32,7 +32,7 @@ class Ranks(models.Model):
 
 class Personal(models.Model):
     rank = models.ForeignKey(Ranks, blank=True, null=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64, blank=True, null=True, default=None)
+    name = models.CharField(max_length=64, blank=True)
     phone = models.CharField(max_length=64, blank=True, null=True, default=None)
 
     def __str__(self):
@@ -45,7 +45,7 @@ class Personal(models.Model):
 
 
 class OfficersAdminsSedo(models.Model):
-    name = models.CharField(max_length=64, blank=True, null=True, default=None)
+    name = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
         return self.name
@@ -57,13 +57,13 @@ class OfficersAdminsSedo(models.Model):
 
 
 class SedoAllowances(models.Model):
-    our_income_number = models.CharField(max_length=64, blank=True, null=True, default=None)
-    our_income_date = models.DateField(blank=True, null=True, default=None)
+    our_income_number = models.CharField(max_length=64, blank=True)
+    our_income_date = models.DateField(blank=True, null=True)
     alien_outcome_number = models.CharField(max_length=64, blank=True, null=True, default=None)
     alien_outcome_date = models.DateField(blank=True, null=True, default=None)
-    department = models.ForeignKey(Departments, on_delete=models.CASCADE)
-    CAB_officer = models.ForeignKey(OfficersAdminsSedo, related_name='CAB_officer', on_delete=models.DO_NOTHING, null=True, blank=True)
-    cyber_user = models.ForeignKey(Personal, related_name='cyber_user', on_delete=models.DO_NOTHING, null=True, blank=True)
+    department = models.ForeignKey(Departments, blank=True, on_delete=models.CASCADE)
+    CAB_officer = models.ForeignKey(OfficersAdminsSedo, related_name='CAB_officer', on_delete=models.DO_NOTHING)
+    cyber_user = models.ForeignKey(Personal, related_name='cyber_user', on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):

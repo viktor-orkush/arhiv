@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^ajax_add_depart/$', views.ajax_add_depart, name='ajax_add_depart'),
     url(r'^add/$', views.sedoallowance_create, name='add_inclusion'),
+    url(r'^add_computer/$', views.computer_add, name='computer_add'),
     # url(r'^add/$', views.add_inclusion, name='add_inclusion'),
     url(r'^delete/(?P<pk>\d+)/$', views.DeleteInclusion.as_view(), name='delete'),
     url(r'^units/$', views.allUnit, name='all_unit'),

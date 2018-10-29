@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
 
-from cedoinclusion.forms import SedoAllowanceForm
+from cedoinclusion.forms import SedoAllowanceForm, DepartmentsForm, PersonalForm, ComputerFormset
 from cedoinclusion.models import *
 
 
@@ -17,14 +17,47 @@ class DeleteInclusion(DeleteView):
 
 def sedoallowance_create(request):
     if request.method == "POST":
-        formset = SedoAllowanceForm(request.POST)
-        if formset.is_valid():
-            formset.save()
-            # Do something.
+        allow_form = SedoAllowanceForm(request.POST)
+        depart_form = DepartmentsForm(request.POST)
+        cyber_user_form = PersonalForm(request.POST)
+        if all([depart_form.is_valid(), allow_form.is_valid(), cyber_user_form.is_valid()]):
+            department = depart_form.save()
+            cyber_user= cyber_user_form.save()
+            allowance = allow_form.save(commit=False)
+            allowance.cyber_user = cyber_user
+            allowance.department = department
+            allowance.save()
+            return redirect('all_inclusion')
     else:
-        formset = SedoAllowanceForm()
-    return render(request, 'cedoinclusion/sedoallowance_create.html', {'form': formset})
+        allow_form = SedoAllowanceForm()
+        depart_form = DepartmentsForm()
+        cyber_user_form = PersonalForm()
+    return render(request, 'cedoinclusion/sedoallowances_create.html', {'allow_form': allow_form,
+                                                                       'depart_form':depart_form,
+                                                                       'person_form':cyber_user_form})
 
+
+def computer_add(request):
+    template_name = 'cedoinclusion/computer_add.html'
+    heading_message = 'Formset Demo'
+    if request.method == 'GET':
+        formset = ComputerFormset(request.GET or None)
+    elif request.method == 'POST':
+        formset = ComputerFormset(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                # extract name from each form and save
+                name = form.cleaned_data.get('name')
+                # save book instance
+                if name:
+                    pass
+                    # Book(name=name).save()
+            # once all books are saved, redirect to book list view
+            return redirect('all_inclusion')
+    return render(request, template_name, {
+        'formset': formset,
+        'heading': heading_message,
+    })
 
 
 def all_inclusion(request):
@@ -96,7 +129,7 @@ def add_inclusion(request):
 
         CAB_officeres = data.get("CAB_officeres")
 
-        department, dep_created = Department.objects.get_or_create(name=department,
+        department, dep_created = Departments.objects.get_or_create(name=department,
                                                                    military_number=military_number,
                                                                    city=city,
                                                                    street=street,
