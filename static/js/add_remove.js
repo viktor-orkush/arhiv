@@ -1,5 +1,7 @@
 function cloneMore(selector, type) {
     var newElement = $(selector).clone(true);
+    add_total_form = $('#id_form-TOTAL_FORMS').val();
+    $('#id_form-TOTAL_FORMS').val(parseInt(add_total_form)+1);
     newElement.find('input').each(function () {
         var tID = $(this).attr("name").split('-');
         var re = parseInt(tID[1]);
@@ -21,6 +23,8 @@ function cloneMore(selector, type) {
 };
 
 function deleteForm(prefix, btn) {
+    total_form = $('#id_form-TOTAL_FORMS').val();
+    $('#id_form-TOTAL_FORMS').val(parseInt(total_form)-1);
     $(btn).parent().parent().parent().remove();
     return false;
 }

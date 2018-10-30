@@ -24,11 +24,43 @@ class PersonalForm (ModelForm):
 
 
 class ComputerForm(forms.Form):
-    name = forms.CharField(
-        label='Computer Name',
+    serial_number = forms.CharField(
+        label='Серійний номер',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter Book Name here'
+            'placeholder': 'Серійний номер'
         })
     )
-ComputerFormset = formset_factory(ComputerForm, extra=1)
+    type = forms.CharField(
+        label='Тип АРМ',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Тип АРМ'
+        })
+    )
+    ip = forms.GenericIPAddressField(
+        label='ІР адреса',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'ІР адреса'
+        })
+    )
+    cabinet_number = forms.CharField(
+        label='Номер каб.',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Номер каб.'
+        })
+    )
+
+    # def __init__(self, *args, **kwargs):
+    #     super(ComputerForm, self).__init__(*args, **kwargs)
+
+    # # def __init__(self, *args, **kwargs):
+    #     self.request = kwargs.pop('request', None)
+    #     super(ComputerForm, self).__init__(*args, **kwargs)
+
+ComputerFormset = formset_factory(ComputerForm)
+
+# FamilyMemberFormSet = inlineformset_factory(Profile, FamilyMember,
+#                                             form=FamilyMemberForm, extra=1)

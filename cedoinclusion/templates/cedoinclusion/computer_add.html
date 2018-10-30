@@ -26,9 +26,10 @@
                     <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                 </div>
                 <div class="custom-file">
-                    {{ form.name }}
-                    {{ form.name }}
-                    {{ form.name }}
+                    {{ form.serial_number }}
+                    {{ form.ip }}
+                    {{ form.type }}
+                    {{ form.cabinet_number }}
                     {#            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Text input with segmented dropdown button">#}
                     <div class="input-group-append">
                         <button class="btn btn-success" type="button" value="Add More" id="add_more">Add</button>
@@ -36,6 +37,7 @@
                 </div>
             </div>
         {% endfor %}
+        <button class="btn btn-success" type="submit"  value="Submit">Add</button>
     </form>
 
     <script>

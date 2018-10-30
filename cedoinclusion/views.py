@@ -1,12 +1,13 @@
 import json
 
+from django.forms import formset_factory
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
 
-from cedoinclusion.forms import SedoAllowanceForm, DepartmentsForm, PersonalForm, ComputerFormset
+from cedoinclusion.forms import SedoAllowanceForm, DepartmentsForm, PersonalForm, ComputerFormset, ComputerForm
 from cedoinclusion.models import *
 
 
@@ -22,7 +23,7 @@ def sedoallowance_create(request):
         cyber_user_form = PersonalForm(request.POST)
         if all([depart_form.is_valid(), allow_form.is_valid(), cyber_user_form.is_valid()]):
             department = depart_form.save()
-            cyber_user= cyber_user_form.save()
+            cyber_user = cyber_user_form.save()
             allowance = allow_form.save(commit=False)
             allowance.cyber_user = cyber_user
             allowance.department = department
@@ -33,31 +34,30 @@ def sedoallowance_create(request):
         depart_form = DepartmentsForm()
         cyber_user_form = PersonalForm()
     return render(request, 'cedoinclusion/sedoallowances_create.html', {'allow_form': allow_form,
-                                                                       'depart_form':depart_form,
-                                                                       'person_form':cyber_user_form})
+                                                                        'depart_form': depart_form,
+                                                                        'person_form': cyber_user_form})
 
 
 def computer_add(request):
-    template_name = 'cedoinclusion/computer_add.html'
-    heading_message = 'Formset Demo'
-    if request.method == 'GET':
-        formset = ComputerFormset(request.GET or None)
-    elif request.method == 'POST':
-        formset = ComputerFormset(request.POST)
+    ComputerFormSet = formset_factory(ComputerForm)
+    if request.method == 'POST':
+        formset = ComputerFormSet(request.POST, request.FILES)
+        # formset = ComputerFormSet(request.POST)
         if formset.is_valid():
             for form in formset:
-                # extract name from each form and save
-                name = form.cleaned_data.get('name')
-                # save book instance
-                if name:
-                    pass
-                    # Book(name=name).save()
-            # once all books are saved, redirect to book list view
+                print(form )
+                form_clean = form.cleaned_data
+                serial_number = form_clean.get('serial_number')
+                ip = form_clean.get('ip')
+                type = form_clean.get('type')
+                cabinet_number = form_clean.get('cabinet_number')
+                if serial_number:
+                    Computers(serial_number=serial_number, ip=ip,type=type,cabinet_number=cabinet_number).save()
+                    # once all books are saved, redirect to book list view
             return redirect('all_inclusion')
-    return render(request, template_name, {
-        'formset': formset,
-        'heading': heading_message,
-    })
+    else:
+        formset = ComputerFormset()
+    return render(request, 'cedoinclusion/computer_add.html', {'formset': formset})
 
 
 def all_inclusion(request):
@@ -74,8 +74,8 @@ def delete_inclusion(request, pk):
 def edit_department(request, sedoAllowance_id):
     if request.method == 'GET':
         ranks = Ranks.objects.all()
-        sedoAllowance = SedoAllowances.objects.get(id = sedoAllowance_id)
-        computers = Computers.objects.filter(sedo_allowance = sedoAllowance_id)
+        sedoAllowance = SedoAllowances.objects.get(id=sedoAllowance_id)
+        computers = Computers.objects.filter(sedo_allowance=sedoAllowance_id)
         CAB_officeres = OfficersAdminsSedo.objects.all()
         return render(request, 'cedoinclusion/edit.html', locals())
     else:
@@ -85,8 +85,8 @@ def edit_department(request, sedoAllowance_id):
 
 
 def allowance_detail_info(request, sedoAllowance_id):
-    computers = Computers.objects.filter(sedo_allowance = sedoAllowance_id)
-    sedoAllowance = SedoAllowances.objects.get(id = sedoAllowance_id)
+    computers = Computers.objects.filter(sedo_allowance=sedoAllowance_id)
+    sedoAllowance = SedoAllowances.objects.get(id=sedoAllowance_id)
     return render(request, 'cedoinclusion/allowanceDetailInfo.html', locals())
 
 
@@ -130,31 +130,32 @@ def add_inclusion(request):
         CAB_officeres = data.get("CAB_officeres")
 
         department, dep_created = Departments.objects.get_or_create(name=department,
-                                                                   military_number=military_number,
-                                                                   city=city,
-                                                                   street=street,
-                                                                   building = building)
+                                                                    military_number=military_number,
+                                                                    city=city,
+                                                                    street=street,
+                                                                    building=building)
         try:
-            rank = Ranks.objects.filter(id = cyber_rank).first()
+            rank = Ranks.objects.filter(id=cyber_rank).first()
         except Ranks.DoesNotExist:
             rank = None
-        cyber_user, cyber_created = Personal.objects.get_or_create(rank = rank, name = cyber_name, phone = cyber_phone)
+        cyber_user, cyber_created = Personal.objects.get_or_create(rank=rank, name=cyber_name, phone=cyber_phone)
         try:
-            CAB_officeres = OfficersAdminsSedo.objects.filter(id = CAB_officeres).first()
+            CAB_officeres = OfficersAdminsSedo.objects.filter(id=CAB_officeres).first()
         except OfficersAdminsSedo.DoesNotExist:
             CAB_officeres = None
-        sedo_allowance = SedoAllowances.objects.create(our_income_number = our_income_number,
-                                                       our_income_date = our_income_date,
-                                                       alien_outcome_number = alien_outcome_number,
-                                                       alien_outcome_date = alien_outcome_date,
-                                                       department = department,
+        sedo_allowance = SedoAllowances.objects.create(our_income_number=our_income_number,
+                                                       our_income_date=our_income_date,
+                                                       alien_outcome_number=alien_outcome_number,
+                                                       alien_outcome_date=alien_outcome_date,
+                                                       department=department,
                                                        CAB_officer=CAB_officeres,
                                                        cyber_user=cyber_user)
 
         for serial_num in serial_numbers:
             i = 0
-            Computers.objects.create(sedo_allowance = sedo_allowance, serial_number = serial_num, type = computer_types[i], ip=ip[i], cabinet_number = room_numbers[i])
-            i+=1
+            Computers.objects.create(sedo_allowance=sedo_allowance, serial_number=serial_num, type=computer_types[i],
+                                     ip=ip[i], cabinet_number=room_numbers[i])
+            i += 1
         return redirect('all_inclusion')
 
 

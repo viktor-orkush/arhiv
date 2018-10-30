@@ -76,8 +76,9 @@ class SedoAllowances(models.Model):
 
 
 class Computers(models.Model):
-    sedo_allowance = models.ForeignKey(SedoAllowances, on_delete=models.CASCADE)
+    sedo_allowance = models.ForeignKey(SedoAllowances, blank=True, null=True, on_delete=models.CASCADE)
     serial_number = models.CharField(max_length=64, blank=True, null=True, default=None)
+    ip = models.GenericIPAddressField(blank=True, null=True)
     type = models.CharField(max_length=64, blank=True, null=True, default=None)
     cabinet_number = models.CharField(max_length=8, blank=True, default=0)
 
