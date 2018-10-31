@@ -2,15 +2,15 @@ from django.db import models
 
 
 class Departments(models.Model):
-    name = models.CharField(max_length=64, blank=True)
+    name = models.CharField(max_length=64)
     military_number = models.CharField(max_length=16, blank=True, null=True, default=None)
-    city = models.CharField(max_length=64)
+    city = models.CharField(max_length=64, blank=True, null=True, default=None)
     street = models.CharField(max_length=64, blank=True, null=True, default=None)
     building = models.CharField(max_length=64, blank=True, null=True, default=None)
 
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return '{}'.format(self.name)
 
     class Meta:
         verbose_name = 'Департамент'
@@ -32,16 +32,16 @@ class Ranks(models.Model):
 
 class Personal(models.Model):
     rank = models.ForeignKey(Ranks, blank=True, null=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64, blank=True)
+    personal_name = models.CharField(max_length=64   )
     phone = models.CharField(max_length=64, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return '{}'.format(self.personal_name)
 
     class Meta:
         verbose_name = 'Персонал'
         verbose_name_plural = 'Персонал'
-        ordering = ('name',)
+        ordering = ('personal_name',)
 
 
 class OfficersAdminsSedo(models.Model):
@@ -61,9 +61,9 @@ class SedoAllowances(models.Model):
     our_income_date = models.DateField(blank=True, null=True)
     alien_outcome_number = models.CharField(max_length=64, blank=True, null=True, default=None)
     alien_outcome_date = models.DateField(blank=True, null=True, default=None)
-    department = models.ForeignKey(Departments, blank=True, on_delete=models.CASCADE)
+    department = models.ForeignKey(Departments,  on_delete=models.CASCADE)
     CAB_officer = models.ForeignKey(OfficersAdminsSedo, related_name='CAB_officer', on_delete=models.DO_NOTHING)
-    cyber_user = models.ForeignKey(Personal, related_name='cyber_user', on_delete=models.DO_NOTHING)
+    cyber_user = models.ForeignKey(Personal, related_name='cyber_user', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):

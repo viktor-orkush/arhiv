@@ -19,7 +19,7 @@ function cloneMore(selector, type) {
         .attr('id', 'remove')
         .removeClass('btn-success')
         .addClass('btn-danger')
-        .html('remove');
+        .html('-');
 };
 
 function deleteForm(prefix, btn) {

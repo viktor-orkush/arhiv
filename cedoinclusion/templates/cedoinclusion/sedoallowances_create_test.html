@@ -1,0 +1,29 @@
+{% include 'base.html' %}
+
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+        {{ allow_form.as_p }}
+        {{ depart_form}}<br><br><br><br>
+{#        {{ person_form}}#}
+
+
+        {{ person_form.non_field_errors }}
+<div class="fieldWrapper">
+    {{ person_form.rank.errors }}
+    <label for="{{ person_form.rank.id_for_label }}">Звання:</label>
+    {{ person_form.rank }}
+</div>
+<div class="fieldWrapper">
+{#    {{ person_form.name.errors }}#}
+{#    <label for="">Прізвище:</label>#}
+    {{ person_form.name }}
+</div>
+<div class="fieldWrapper">
+    {{ person_form.phone.errors }}
+    <label for="{{ person_form.phone.id_for_label }}">Телефон:</label>
+    {{ person_form.phone }}
+</div>
+    <input class="btn btn-danger" type="submit" value="Confirm"/>
+    </form>
+{% endblock %}
