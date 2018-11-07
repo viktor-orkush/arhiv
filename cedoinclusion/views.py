@@ -1,8 +1,8 @@
 import json
 
-from django.forms import formset_factory
+from django.forms import formset_factory, inlineformset_factory
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
@@ -22,11 +22,6 @@ def sedoallowance_create(request):
     depart_form = DepartmentsForm()
     cyber_user_form = PersonalForm()
     formset = ComputerFormset()
-
-    all_department = Departments.objects.all()
-    ranks = Ranks.objects.all()
-    CAB_officeres = OfficersAdminsSedo.objects.all()
-
     if request.method == "POST":
         formset = ComputerFormSet(request.POST, request.FILES)
         allow_form = SedoAllowanceForm(request.POST)
@@ -39,10 +34,6 @@ def sedoallowance_create(request):
         c = allow_form.is_valid()
         d = cyber_user_form.is_valid()
         if a and b and c and d:
-        # if formset.is_valid() and \
-        #         depart_form.is_valid() and \
-        #         allow_form.is_valid() and \
-        #         cyber_user_form.is_valid():
             try:
                 CAB_officere = OfficersAdminsSedo.objects.filter(id=CAB_officere).first()
             except OfficersAdminsSedo.DoesNotExist:
@@ -51,7 +42,7 @@ def sedoallowance_create(request):
             try:
                 name_cl = depart_form.cleaned_data
                 name = name_cl.get('name')
-                department = Departments.objects.filter(name = name).first()
+                department = Departments.objects.get(name = name)
             except Departments.DoesNotExist:
                 department = depart_form.save()
             cyber_user = cyber_user_form.save()
@@ -62,7 +53,7 @@ def sedoallowance_create(request):
             allowance.save()
             # ****************Add computer ARM********************
             for form in formset:
-                print(form)
+                # print(form)
                 form_clean = form.cleaned_data
                 serial_number = form_clean.get('serial_number')
                 ip = form_clean.get('ip')
@@ -73,13 +64,61 @@ def sedoallowance_create(request):
             return redirect('all_inclusion')
         else:
             errors = formset.errors
+
+    all_department = Departments.objects.all()
+    # ranks = Ranks.objects.all()
+    # CAB_officeres = OfficersAdminsSedo.objects.all()
     return render(request, 'cedoinclusion/sedoallowances_create.html', {'allow_form': allow_form,
                                                                         'depart_form': depart_form,
                                                                         'person_form': cyber_user_form,
                                                                         'formset': formset,
-                                                                        'ranks':ranks,
-                                                                        'all_department':all_department,
-                                                                        'CAB_officeres':CAB_officeres})
+                                                                        'all_department':all_department})
+
+
+def sedo_allowance_edit(request, pk):
+    sedo_allowance = get_object_or_404(SedoAllowances, pk=pk)
+    ComputerInLineFormSet = inlineformset_factory(SedoAllowances,
+                                                  Computers,
+                                                  fields=('id','serial_number',
+                                                                                     'type',
+                                                                                     'ip',
+                                                                                     'cabinet_number',),
+                                                  extra=0,
+                                                  can_delete=True,
+                                                  )
+    sedo_allowance_form = SedoAllowanceForm(request.POST or None, instance=sedo_allowance)
+    computers_formset = ComputerInLineFormSet(request.POST or None, request.FILES or None, instance=sedo_allowance)
+    department_form = DepartmentsForm(request.POST or None, instance=sedo_allowance.department)
+    cyber_user_form = PersonalForm(request.POST or None, instance=sedo_allowance.cyber_user)
+    if request.method == 'POST':
+        a = computers_formset.is_valid()
+        b = sedo_allowance_form.is_valid()
+        c = department_form.is_valid()
+        d = cyber_user_form.is_valid()
+        if sedo_allowance_form.is_valid() and department_form.is_valid() and cyber_user_form.is_valid():
+            sedo_allowance = sedo_allowance_form.save(commit=False)
+            department = department_form.save()
+            cyber_user = cyber_user_form.save()
+            sedo_allowance.save()
+            if computers_formset.is_valid():
+                computers_formset.save()
+                return redirect('all_inclusion')
+
+        errors = computers_formset.errors
+
+
+        # sedo_allowance_form = SedoAllowanceForm(instance=sedo_allowance)
+        # computers_formset = ComputerInLineFormSet(instance=sedo_allowance)
+        # department_form = DepartmentsForm(instance=sedo_allowance)
+        # cyber_user_form = PersonalForm(instance=sedo_allowance)
+
+        # all_department = Departments.objects.all()
+        # ranks = Ranks.objects.all()
+        # CAB_officeres = OfficersAdminsSedo.objects.all()
+    return render(request, 'cedoinclusion/sedoallowances_edit.html', {'allow_form': sedo_allowance_form,
+                                                                            'depart_form': department_form,
+                                                                            'person_form': cyber_user_form,
+                                                                            'formset': computers_formset})
 
 
 def all_inclusion(request):
@@ -91,19 +130,6 @@ def all_inclusion(request):
 def delete_inclusion(request, pk):
     sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
     return render(request, 'cedoinclusion/all.html', locals())
-
-
-def edit_department(request, sedoAllowance_id):
-    if request.method == 'GET':
-        ranks = Ranks.objects.all()
-        sedoAllowance = SedoAllowances.objects.get(id=sedoAllowance_id)
-        computers = Computers.objects.filter(sedo_allowance=sedoAllowance_id)
-        CAB_officeres = OfficersAdminsSedo.objects.all()
-        return render(request, 'cedoinclusion/edit.html', locals())
-    else:
-        computers = Computers.objects.all()
-        sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
-        return render(request, 'cedoinclusion/edit.html', locals())
 
 
 def allowance_detail_info(request, sedoAllowance_id):

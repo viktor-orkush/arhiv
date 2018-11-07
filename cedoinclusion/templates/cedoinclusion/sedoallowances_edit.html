@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %} edit allowance  {% endblock %}
+
+{% block content %}
+     <form action="" method="post">
+        {% csrf_token %}
+        {% if formset.errors or depart_form.errors %}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          {{ formset.errors }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+
+        <div class="form-group row">
+            <label for="example-text-input" class="col-2 col-form-label"> Підрозділ</label>
+            <div class="col-10">
+                {{ depart_form.name }}
+{#                <datalist id="cars">#}
+{#                  {% for department in all_department %}#}
+{#                        <option value="{{ department.name }}">{{ department.name }}</option>#}
+{#                  {% endfor %}#}
+{#                </datalist>#}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-url-input" class="col-2 col-form-label">Розташування</label>
+            <div class="col-3">
+                {{ depart_form.military_number }}
+            </div>
+            <div class="col-1">
+                {{ depart_form.city }}
+            </div>
+            <div class="col-4">
+                {{ depart_form.street }}
+            </div>
+            <div class="col-2">
+                {{ depart_form.building }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="example-tel-input" class="col-2 col-form-label">Відповідальний за захист інформації в
+                підрозділі</label>
+            <div class="col-2">
+                {{ person_form.rank }}
+            </div>
+            <div class="col-4">
+                {{ person_form.personal_name }}
+            </div>
+            <div class="col-4">
+                {{ person_form.phone }}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-password-input" class="col-2 col-form-label">Вхідний номер документу</label>
+            <div class="col-5">
+                {{ allow_form.our_income_number }}
+            </div>
+            <div class="col-5">
+                {{ allow_form.our_income_date }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="example-password-input" class="col-2 col-form-label">Вихідний номер документу</label>
+            <div class="col-5">
+                {{ allow_form.alien_outcome_number }}
+            </div>
+            <div class="col-5">
+                {{ allow_form.alien_outcome_date }}
+            </div>
+        </div>
+        <input type="hidden" name="count" value="1"/>
+
+            <div class="form-group">
+                <div class="card">
+                  <div class="card-header">
+                    АРМ!!!!!!!!!!!!!
+                  </div>
+                  <div class="card-body">
+                      {{ formset.management_form }}
+                      {% for form in formset %}
+                      <div class="input-group">
+                        <div class="custom-file">
+                            {{ form.serial_number }}
+                            {{ form.ip }}
+                            {{ form.type }}
+                            {{ form.cabinet_number }}
+{#                            <td class="hidden">{{ form.id }}</td>#}
+                            {{ form.id }}
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="button" value="Add More" id="add_more">+</button>
+                            </div>
+                            {% if formset.can_delete %}
+                                <div class="input-group-append">
+                                {{ form.DELETE }} delete
+                                </div>
+                            {% endif %}
+                        </div>
+                      </div>
+                      {% endfor %}
+                   </div>
+                </div>
+            </div>
+        <div class="form-group row">
+            <label for="example-tel-input" class="col-2 col-form-label">Хто відпрацював офіцер ЦАБ</label>
+            <div class="col-4">
+                {{ allow_form.CAB_officer }}
+            </div>
+        </div>
+
+        <a href='/' class="btn btn-primary" type="submit">На головну </a>
+        <button class="btn btn-primary" type="submit">Додати</button>
+    </form>
+
+
+    <script>
+        $(document).on('click', '#add_more', function (e) {
+            e.preventDefault();
+            cloneMore('div.input-group:last', 'form');
+            return false;
+        });
+
+        $(document).on('click', '#remove', function (e) {
+            e.preventDefault();
+            deleteForm('div.input-group', $(this));
+            return false;
+        });
+    </script>
+
+{% endblock %}

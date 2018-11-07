@@ -56,6 +56,7 @@ class PersonalForm (ModelForm):
                                                       'placeholder': 'Телефон'}),
         }
 
+
 class ComputerForm(forms.Form):
     serial_number = forms.CharField(
         label='Серійний номер',
