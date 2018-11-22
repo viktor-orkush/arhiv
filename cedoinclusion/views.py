@@ -105,20 +105,10 @@ def sedo_allowance_edit(request, pk):
                 return redirect('all_inclusion')
 
         errors = computers_formset.errors
-
-
-        # sedo_allowance_form = SedoAllowanceForm(instance=sedo_allowance)
-        # computers_formset = ComputerInLineFormSet(instance=sedo_allowance)
-        # department_form = DepartmentsForm(instance=sedo_allowance)
-        # cyber_user_form = PersonalForm(instance=sedo_allowance)
-
-        # all_department = Departments.objects.all()
-        # ranks = Ranks.objects.all()
-        # CAB_officeres = OfficersAdminsSedo.objects.all()
     return render(request, 'cedoinclusion/sedoallowances_edit.html', {'allow_form': sedo_allowance_form,
-                                                                            'depart_form': department_form,
-                                                                            'person_form': cyber_user_form,
-                                                                            'formset': computers_formset})
+                                                                      'depart_form': department_form,
+                                                                      'person_form': cyber_user_form,
+                                                                      'formset': computers_formset})
 
 
 def all_inclusion(request):

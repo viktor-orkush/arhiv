@@ -32,7 +32,7 @@ class Ranks(models.Model):
 
 class Personal(models.Model):
     rank = models.ForeignKey(Ranks, blank=True, null=True, on_delete=models.CASCADE)
-    personal_name = models.CharField(max_length=64   )
+    personal_name = models.CharField(max_length=64, null=True)
     phone = models.CharField(max_length=64, blank=True, null=True, default=None)
 
     def __str__(self):

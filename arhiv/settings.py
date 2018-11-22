@@ -25,7 +25,7 @@ SECRET_KEY = '!2c)ngf*n(j_fx@b5hxi*pv-pt0_%w499s^#k#1av6weg4)+_%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -77,9 +77,17 @@ WSGI_APPLICATION = 'arhiv.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'arhiv',
+            'USER': 'postgres',
+            'PASSWORD': '123qaz',
+            'HOST': 'localhost',
+            'PORT': '5432',
     }
 }
 

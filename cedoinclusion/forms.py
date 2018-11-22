@@ -83,7 +83,8 @@ class ComputerForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'ІР адреса'
+            'placeholder': 'ІР адреса',
+            'pattern' : "^([0-9]{1,3}\.){3}[0-9]{1,3}$"
         })
     )
     cabinet_number = forms.CharField(
