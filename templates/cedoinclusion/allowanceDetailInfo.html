@@ -47,8 +47,12 @@
             </td>
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                    <a href="{% url 'edit' sedoAllowance.id %}" type="button" class="btn btn-info  btn-secondary">Редагувати</a>
-                    <a href="#" type="button" class="btn btn-danger btn-secondary">Видалити</a>
+                        <a href="{% url 'edit' sedoAllowance.id %}" style='color:blue'>
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <a href="{% url 'delete' pk=sedoAllowance.id %}" style='color:red'>
+                            <i class="far fa-trash-alt"></i>
+                        </a>
                 </div>
             </td>
 
