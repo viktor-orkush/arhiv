@@ -12,11 +12,15 @@ class SedoAllowanceForm(ModelForm):
             'our_income_number': forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'вхідний номер'}),
             'our_income_date': forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': 'дата вхідного'}),
+                                                      'type': "date",
+                                                      'id': "example-date-input"
+                                                      }),
             'alien_outcome_number': forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'вихідний підрозділу'}),
             'alien_outcome_date': forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': 'дата вихідного'}),
+                                                        'type': "date",
+                                                         'id':"example-date-input"
+                                                        }),
             'CAB_officer': forms.Select(attrs={'class': 'form-control'}),
         }
 
