@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Departments(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=512)
     military_number = models.CharField(max_length=16, blank=True, null=True, default=None)
     city = models.CharField(max_length=64, blank=True, null=True, default=None)
     street = models.CharField(max_length=64, blank=True, null=True, default=None)
