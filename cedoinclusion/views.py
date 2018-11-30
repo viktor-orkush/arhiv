@@ -1,5 +1,6 @@
 import json
 
+from django.core.paginator import Paginator
 from django.forms import formset_factory, inlineformset_factory
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
@@ -114,7 +115,11 @@ def sedo_allowance_edit(request, pk):
 def all_inclusion(request):
     computers = Computers.objects.all()
     sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
-    return render(request, 'cedoinclusion/all.html', locals())
+
+    paginator = Paginator(sedoAllowances, 1)  # Show 25 contacts per page
+    page = request.GET.get('page')
+    contacts = paginator.get_page(page)
+    return render(request, 'cedoinclusion/all.html', {'sedoAllowances':contacts, 'computers':computers})
 
 
 def delete_inclusion(request, pk):
