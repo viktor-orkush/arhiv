@@ -21,8 +21,11 @@
                 <td><a href="{% url 'allowance_detail_info' sedoAllowance.id %}">{{ sedoAllowance.department.name }}</a>
                 </td>
                 <td>
-                    <strong>Адреса:</strong> {{ sedoAllowance.department.adress.city }}<br>
-                    <strong>Відповідальний за КБ:</strong> {{ sedoAllowance.cyber_user.name }}<br>
+                    <strong>Адреса:</strong> {{ sedoAllowance.department.city }} {{ sedoAllowance.department.street }}<br>
+                    <strong>Відповідальний за
+                        КБ:</strong> {{ sedoAllowance.cyber_user.rank }} {{ sedoAllowance.cyber_user.personal_name }}
+                    тел:{{ sedoAllowance.cyber_user.phone }}<br>
+                    <strong>Вхідна А0334 №:</strong> {{ sedoAllowance.our_income_number }}
                     <strong>Вхідна А0334 №:</strong> {{ sedoAllowance.our_income_number }}
                     <strong>Від: </strong> {{ sedoAllowance.our_income_date }}<br>
                 </td>
@@ -30,7 +33,7 @@
                 <td>
                     <table class="table table-sm table-borderless">
                         <tr>
-{#                            <th scope="col">№</th>#}
+                            {#                            <th scope="col">№</th>#}
                             <th scope="col">С/Н</th>
                             <th scope="col">IP</th>
                             <th scope="col">Каб.</th>
@@ -38,7 +41,7 @@
                         {% for computer in computers %}
                             <tr>
                                 {% ifequal sedoAllowance.id|stringformat:"s" computer.sedo_allowance|stringformat:"s" %}
-{#                                    <td></td>#}
+                                    {#                                    <td></td>#}
                                     <td>{{ computer.serial_number }}</td>
                                     <td>{{ computer.ip }}</td>
                                     <td>{{ computer.cabinet_number }}</td>
@@ -62,4 +65,32 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+
+        {% if sedoAllowances.has_previous %}
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" href="?page=1">&laquo; first</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" href="?page={{ sedoAllowances.previous_page_number }}">previous</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item">
+            <div class="page-link">Page {{ sedoAllowances.number }} of {{ sedoAllowances.paginator.num_pages }}.</div>
+        </li>
+
+        {% if sedoAllowances.has_next %}
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" href="?page={{ sedoAllowances.next_page_number }}">next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" href="?page={{ sedoAllowances.paginator.num_pages }}">last &raquo;</a>
+            </li>
+        {% endif %}
+
+    </ul>
+    </nav>
 {% endblock %}
