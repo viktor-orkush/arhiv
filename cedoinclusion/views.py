@@ -116,7 +116,7 @@ def all_inclusion(request):
     computers = Computers.objects.all()
     sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
 
-    paginator = Paginator(sedoAllowances, 1)  # Show 25 contacts per page
+    paginator = Paginator(sedoAllowances, 25)  # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     return render(request, 'cedoinclusion/all.html', {'sedoAllowances':contacts, 'computers':computers})
