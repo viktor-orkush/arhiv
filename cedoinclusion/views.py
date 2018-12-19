@@ -2,9 +2,7 @@ import json
 
 from django.core.paginator import Paginator
 from django.forms import formset_factory, inlineformset_factory
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect, render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
 from cedoinclusion.forms import SedoAllowanceForm, DepartmentsForm, PersonalForm, ComputerFormset, ComputerForm
@@ -38,7 +36,6 @@ def sedoallowance_create(request):
                 CAB_officere = OfficersAdminsSedo.objects.filter(id=CAB_officere).first()
             except OfficersAdminsSedo.DoesNotExist:
                 CAB_officere = None
-            # department, created = Departments.objects.get_or_create(**depart_form.cleaned_data)
             try:
                 name_cl = depart_form.cleaned_data
                 name = name_cl.get('name')
@@ -65,8 +62,6 @@ def sedoallowance_create(request):
             errors = formset.errors
 
     all_department = Departments.objects.all()
-    # ranks = Ranks.objects.all()
-    # CAB_officeres = OfficersAdminsSedo.objects.all()
     return render(request, 'cedoinclusion/sedoallowances_create.html', {'allow_form': allow_form,
                                                                         'depart_form': depart_form,
                                                                         'person_form': cyber_user_form,
@@ -102,7 +97,6 @@ def sedo_allowance_edit(request, pk):
             if computers_formset.is_valid():
                 computers_formset.save()
                 return redirect('all_inclusion')
-
         errors = computers_formset.errors
     return render(request, 'cedoinclusion/sedoallowances_edit.html', {'allow_form': sedo_allowance_form,
                                                                       'depart_form': department_form,
