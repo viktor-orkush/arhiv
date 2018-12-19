@@ -112,7 +112,7 @@ def all_inclusion(request):
             sedoAllowances = SedoAllowances.objects.filter(department__name__icontains=search_query)
         except SedoAllowances.DoesNotExist:
             sedoAllowances = []
-        return render(request, 'cedoinclusion/all.html', {'sedoAllowances': sedoAllowances, 'computers': computers})
+        return render(request, 'cedoinclusion/all.html', {'sedoAllowances': sedoAllowances, 'computers': computers, 'search_query':search_query})
 
     sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
     paginator = Paginator(sedoAllowances, 25)  # Show 25 contacts per page
