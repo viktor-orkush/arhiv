@@ -7,7 +7,6 @@ from django.shortcuts import render, redirect, render_to_response, get_object_or
 from django.template import RequestContext
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
-
 from cedoinclusion.forms import SedoAllowanceForm, DepartmentsForm, PersonalForm, ComputerFormset, ComputerForm
 from cedoinclusion.models import *
 
@@ -54,7 +53,6 @@ def sedoallowance_create(request):
             allowance.save()
             # ****************Add computer ARM********************
             for form in formset:
-                # print(form)
                 form_clean = form.cleaned_data
                 serial_number = form_clean.get('serial_number')
                 ip = form_clean.get('ip')
@@ -114,8 +112,15 @@ def sedo_allowance_edit(request, pk):
 
 def all_inclusion(request):
     computers = Computers.objects.all()
-    sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
+    if request.method == 'POST':
+        search_query = request.POST.get('search_box',None)
+        try:
+            sedoAllowances = SedoAllowances.objects.filter(department__name__icontains=search_query)
+        except SedoAllowances.DoesNotExist:
+            sedoAllowances = []
+        return render(request, 'cedoinclusion/all.html', {'sedoAllowances': sedoAllowances, 'computers': computers})
 
+    sedoAllowances = SedoAllowances.objects.all().order_by('our_income_date')
     paginator = Paginator(sedoAllowances, 25)  # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)

@@ -23,11 +23,12 @@
                 <td>
                     <strong>Адреса:</strong> {{ sedoAllowance.department.city }} {{ sedoAllowance.department.street }}<br>
                     <strong>Відповідальний за
-                        КБ:</strong> {{ sedoAllowance.cyber_user.rank }} {{ sedoAllowance.cyber_user.personal_name }}
-                    тел:{{ sedoAllowance.cyber_user.phone }}<br>
-                    <strong>Вхідна А0334 №:</strong> {{ sedoAllowance.our_income_number }}
+                        КБ:</strong> {{ sedoAllowance.cyber_user.rank|default_if_none:"" }} {{ sedoAllowance.cyber_user.personal_name }}
+                    тел: {{ sedoAllowance.cyber_user.phone }}<br>
                     <strong>Вхідна А0334 №:</strong> {{ sedoAllowance.our_income_number }}
                     <strong>Від: </strong> {{ sedoAllowance.our_income_date }}<br>
+                    <strong>Вихідна (вкл-го) підрозділу №:</strong> {{ sedoAllowance.alien_outcome_number }}
+                    <strong>Від: </strong> {{ sedoAllowance.alien_outcome_date }}<br>
                 </td>
                 <td>{{ sedoAllowance.CAB_officer.name }}</td>
                 <td>

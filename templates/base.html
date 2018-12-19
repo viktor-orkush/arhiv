@@ -36,6 +36,11 @@
                     </li>
                 </ul>
                 <div class="form-inline">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input  id="search_box" type="text" name="search_box"  placeholder="Search..." >
+                        <button id="search_submit" type="submit" >Submit</button>
+                    </form>
                     <input class="form-control mr-sm-2" type="search" placeholder="Пошук" aria-label="Search" id="myInput">
                     <a href=" {% url 'add_inclusion' %}" class="btn btn-outline-info my-2 my-sm-0" type="submit">Додати включення</a>
                 </div>
